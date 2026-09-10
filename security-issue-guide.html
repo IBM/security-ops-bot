@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Security Tracking Issue — What It Is & What You Need to Do</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+      font-size: 15px;
+      line-height: 1.65;
+      color: #1f2328;
+      background: #ffffff;
+    }
+
+    .page {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 48px 24px 64px;
+    }
+
+    /* ── Header ── */
+    .header {
+      border-bottom: 2px solid #e5e7eb;
+      padding-bottom: 24px;
+      margin-bottom: 36px;
+    }
+    .header-label {
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      color: #57606a;
+      margin-bottom: 8px;
+    }
+    .header h1 {
+      font-size: 26px;
+      font-weight: 700;
+      color: #1f2328;
+      line-height: 1.25;
+    }
+    .header p {
+      margin-top: 10px;
+      color: #57606a;
+      font-size: 14px;
+    }
+
+    /* ── Callout boxes ── */
+    .callout {
+      border-radius: 6px;
+      padding: 16px 20px;
+      margin: 28px 0;
+      border-left: 4px solid;
+    }
+    .callout-green  { background: #f0fdf4; border-color: #22c55e; }
+    .callout-blue   { background: #eff6ff; border-color: #3b82d4; }
+    .callout-yellow { background: #fffbeb; border-color: #f59e0b; }
+    .callout-red    { background: #fff1f2; border-color: #f43f5e; }
+
+    .callout .callout-title {
+      font-weight: 700;
+      font-size: 14px;
+      margin-bottom: 4px;
+    }
+    .callout p, .callout li { font-size: 14px; color: #374151; }
+    .callout ul { padding-left: 20px; margin-top: 6px; }
+    .callout ul li { margin-bottom: 3px; }
+
+    /* ── Section headings ── */
+    h2 {
+      font-size: 19px;
+      font-weight: 700;
+      margin: 40px 0 12px;
+      padding-bottom: 6px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+    h3 {
+      font-size: 15px;
+      font-weight: 700;
+      margin: 24px 0 8px;
+      color: #1f2328;
+    }
+
+    /* ── Body text ── */
+    p { margin-bottom: 12px; color: #374151; }
+
+    /* ── Timeline ── */
+    .timeline { margin: 20px 0 28px; }
+    .timeline-item {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 0;
+      position: relative;
+    }
+    .timeline-item:not(:last-child)::before {
+      content: "";
+      position: absolute;
+      left: 19px;
+      top: 38px;
+      bottom: -4px;
+      width: 2px;
+      background: #e5e7eb;
+    }
+    .timeline-dot {
+      flex-shrink: 0;
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      font-weight: 700;
+      margin-top: 2px;
+      position: relative;
+      z-index: 1;
+    }
+    .dot-blue   { background: #dbeafe; color: #1d4ed8; }
+    .dot-yellow { background: #fef3c7; color: #b45309; }
+    .dot-red    { background: #fee2e2; color: #b91c1c; }
+    .dot-gray   { background: #f3f4f6; color: #57606a; }
+
+    .timeline-body { padding: 4px 0 24px; }
+    .timeline-body strong { display: block; font-size: 14px; font-weight: 700; margin-bottom: 2px; }
+    .timeline-body p { font-size: 14px; margin-bottom: 0; }
+
+    /* ── SLA table ── */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      margin: 16px 0 24px;
+    }
+    th {
+      background: #f7f8fa;
+      font-weight: 600;
+      text-align: left;
+      padding: 10px 14px;
+      border: 1px solid #e5e7eb;
+      color: #1f2328;
+    }
+    td {
+      padding: 9px 14px;
+      border: 1px solid #e5e7eb;
+      color: #374151;
+      vertical-align: top;
+    }
+    tr:nth-child(even) td { background: #fafafa; }
+
+    .sev-critical { color: #b91c1c; font-weight: 700; }
+    .sev-high     { color: #c2410c; font-weight: 700; }
+    .sev-medium   { color: #92400e; font-weight: 700; }
+    .sev-low      { color: #374151; }
+
+    /* ── Steps list ── */
+    .steps { counter-reset: step; margin: 16px 0 28px; }
+    .step-item {
+      counter-increment: step;
+      display: flex;
+      gap: 14px;
+      margin-bottom: 16px;
+    }
+    .step-num {
+      flex-shrink: 0;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: #1f2328;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1px;
+    }
+    .step-text { font-size: 14px; color: #374151; padding-top: 4px; }
+    .step-text strong { color: #1f2328; }
+
+    /* ── FAQ accordion-style list ── */
+    .faq-item { border-bottom: 1px solid #e5e7eb; padding: 16px 0; }
+    .faq-item:first-child { border-top: 1px solid #e5e7eb; }
+    .faq-q { font-weight: 700; font-size: 14px; color: #1f2328; margin-bottom: 6px; }
+    .faq-a { font-size: 14px; color: #374151; }
+
+    /* ── Components summary ── */
+    .component-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 16px 0 28px;
+    }
+    @media (max-width: 560px) { .component-grid { grid-template-columns: 1fr; } }
+
+    .component-card {
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      padding: 14px 16px;
+      background: #f7f8fa;
+    }
+    .component-card .c-title {
+      font-weight: 700;
+      font-size: 13px;
+      color: #1f2328;
+      margin-bottom: 4px;
+    }
+    .component-card .c-time {
+      font-size: 12px;
+      color: #57606a;
+      margin-bottom: 6px;
+    }
+    .component-card p { font-size: 13px; color: #57606a; margin-bottom: 0; }
+
+    /* ── Footer ── */
+    .footer {
+      margin-top: 60px;
+      padding-top: 16px;
+      border-top: 1px solid #e5e7eb;
+      text-align: center;
+      font-size: 12px;
+      color: #57606a;
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ── Header ── -->
+  <div class="header">
+    <div class="header-label">IBM GitHub Org · Security Operations</div>
+    <h1>You received a security tracking issue — here's what it means</h1>
+  </div>
+
+  <!-- ── TL;DR callout ── -->
+  <div class="callout callout-yellow">
+    <div class="callout-title">TL;DR — open security alerts found in your IBM org repo; please fix them before the deadline</div>
+    <p>The bot opened this issue because open security alerts were found in your repository.
+       <strong>Your job is to resolve those alerts</strong> — fix the vulnerable dependency, patch
+       the code flaw, or revoke the leaked secret. The bot manages the issue itself: it updates the
+       issue body daily and closes it automatically once all alerts are gone. You do not need to
+       close, edit, or label the issue — just fix the underlying security alerts.</p>
+  </div>
+
+  <!-- ── Section 1 — What is this issue? ── -->
+  <h2>What is this issue?</h2>
+
+  <p>Once a day the security-ops automation scans every active repository in the IBM GitHub org
+     for three kinds of open security alerts:</p>
+
+  <div class="component-grid">
+    <div class="component-card">
+      <div class="c-title">Dependabot Alerts</div>
+      <div class="c-time">Scanner runs daily at 06:00 UTC</div>
+      <p>Vulnerable third-party dependencies identified by GitHub's Dependabot service. Each alert
+         carries a CVE or GHSA identifier and the package that needs to be updated.</p>
+    </div>
+    <div class="component-card">
+      <div class="c-title">Code Scanning Alerts</div>
+      <div class="c-time">Scanner runs daily at 07:00 UTC</div>
+      <p>Potential security vulnerabilities in your own source code found by tools such as
+         CodeQL (e.g. SQL injection, cross-site scripting, unsafe deserialization).</p>
+    </div>
+    <div class="component-card">
+      <div class="c-title">Secret Scanning Alerts</div>
+      <div class="c-time">Scanner runs daily at 07:00 UTC</div>
+      <p>Credentials, API keys, tokens, or other secrets that were accidentally committed to the
+         repository and detected by GitHub's secret scanning service.</p>
+    </div>
+    <div class="component-card">
+      <div class="c-title">Enforcer</div>
+      <div class="c-time">Runs daily at 08:00 UTC</div>
+      <p>Reads every open security issue, evaluates individual SLA deadlines, posts warning
+         comments as deadlines approach, and archives repos only when an SLA is breached.</p>
+    </div>
+  </div>
+
+  <p>If any alerts are found for your repository, the bot creates — or updates — <strong>one
+     security tracking issue</strong> in your repo. A single issue covers all three alert types
+     together so you receive only one notification, not dozens.</p>
+
+  <div class="callout callout-blue">
+    <div class="callout-title">The issue is refreshed every day</div>
+    <p>On every daily run the bot re-reads the live alerts from GitHub and rewrites the issue body
+       to reflect the current state. Once all open alerts in your repository have been resolved, the
+       bot will automatically close the issue on the next run — no manual action needed.</p>
+  </div>
+
+  <!-- ── Section 2 — SLA policy ── -->
+  <h2>SLA deadlines — how they work</h2>
+
+  <p>Each alert has its own individual deadline calculated from the date the alert was first
+     discovered and the severity-based SLA defined in the org-wide policy:</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Severity</th>
+        <th>SLA (days to remediate)</th>
+        <th>Triggers warnings &amp; archiving?</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="sev-critical">Critical</span></td>
+        <td>7 days</td>
+        <td>Yes</td>
+      </tr>
+      <tr>
+        <td><span class="sev-high">High</span></td>
+        <td>30 days</td>
+        <td>Yes</td>
+      </tr>
+      <tr>
+        <td><span class="sev-medium">Medium</span></td>
+        <td>90 days</td>
+        <td>Yes</td>
+      </tr>
+      <tr>
+        <td><span class="sev-low">Low</span></td>
+        <td>No deadline</td>
+        <td>No — tracked for visibility only</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>Each alert is evaluated independently. A critical alert discovered today has a 7-day deadline;
+     a high alert discovered two weeks ago may have 16 days left. The issue body shows the deadline
+     for every alert in the table.</p>
+
+  <!-- ── Section 3 — What happens over time ── -->
+  <h2>What happens as the deadline approaches</h2>
+
+  <div class="timeline">
+    <div class="timeline-item">
+      <div class="timeline-dot dot-blue">1</div>
+      <div class="timeline-body">
+        <strong>Issue opened</strong>
+        <p>The bot creates the security tracking issue the first time alerts are found. You (and
+           other admins named in the issue) receive a GitHub notification. No action is required at
+           this point — but it is a good time to review the alerts and start planning remediation.</p>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot dot-yellow">2</div>
+      <div class="timeline-body">
+        <strong>Warning comments posted (3 days before deadline, then 1 day before)</strong>
+        <p>When 3 days remain before any alert's deadline, the Enforcer posts a warning comment
+           listing the affected alerts. A second warning is posted when only 1 day remains. Each
+           comment @mentions the repo admins so you receive a notification. The warnings are posted
+           once per threshold per alert — you will not receive repeated pings for the same alert.</p>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot dot-red">3</div>
+      <div class="timeline-body">
+        <strong>Archive notice posted &amp; repo archived (if SLA is breached)</strong>
+        <p>If an alert's deadline passes without the alert being resolved, the Enforcer posts a
+           final archive notice listing the breached alerts and archives the repository. The security
+           issue is then closed automatically. See the section below for what this means in
+           practice.</p>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot dot-gray">✓</div>
+      <div class="timeline-body">
+        <strong>Issue closed automatically — no action needed</strong>
+        <p>Once all open alerts are resolved (fixed or dismissed in GitHub), the next daily scan
+           finds nothing to report and closes the issue for you. You do not need to close it
+           manually.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Section 4 — What you should do ── -->
+  <h2>What you should do</h2>
+
+  <p>The right action depends on what state the issue is in when you see it:</p>
+
+  <div class="steps">
+    <div class="step-item">
+      <div class="step-num">1</div>
+      <div class="step-text">
+        <strong>Read the issue body.</strong> It lists every open alert by type, severity, and
+        (for Dependabot) the affected package and whether a fix PR already exists. If a fix PR is
+        already open, you may only need to review and merge it.
+      </div>
+    </div>
+    <div class="step-item">
+      <div class="step-num">2</div>
+      <div class="step-text">
+        <strong>For Dependabot alerts:</strong> enable <em>Dependabot security updates</em> in your
+        repo settings (Settings → Advanced Security → Dependabot security updates → Enable). This
+        lets Dependabot automatically open fix PRs for vulnerable dependencies, dramatically
+        reducing manual effort.
+      </div>
+    </div>
+    <div class="step-item">
+      <div class="step-num">3</div>
+      <div class="step-text">
+        <strong>For code scanning and secret scanning alerts:</strong> review each alert directly in
+        the GitHub Security tab of your repo. Fix the code issue or, if the alert is a false
+        positive, dismiss it with a reason in the GitHub UI.
+      </div>
+    </div>
+    <div class="step-item">
+      <div class="step-num">4</div>
+      <div class="step-text">
+        <strong>If you cannot fix an alert before its deadline:</strong> contact an IBM org security
+        administrator to request that the repository be added to the exemption list. Exempt repos
+        are still scanned and tracked, but archiving is never triggered for them.
+      </div>
+    </div>
+    <div class="step-item">
+      <div class="step-num">5</div>
+      <div class="step-text">
+        <strong>Do not close the tracking issue manually.</strong> The bot checks the alerts
+        daily and will close the issue for you once they are all resolved. No action is needed
+        for the security issue.
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Section 5 — Archiving ── -->
+  <h2>What does "repo archived" mean — and how to recover</h2>
+
+  <div class="callout callout-red">
+    <div class="callout-title">Archiving makes the repo read-only</div>
+    <p>When a repo is archived on GitHub it becomes read-only: code can still be cloned and viewed,
+       but no new commits, issues, pull requests, or pushes are possible. This is a last-resort
+       enforcement action taken only after all warnings have been posted and the SLA deadline has
+       passed without remediation.</p>
+  </div>
+
+  <p>To get an archived repository restored to an active state:</p>
+
+  <div class="steps">
+    <div class="step-item">
+      <div class="step-num">1</div>
+      <div class="step-text">Resolve the security alerts that triggered the archiving (the archive notice comment lists them).
+      </div>
+    </div>
+    <div class="step-item">
+      <div class="step-num">2</div>
+      <div class="step-text">Contact the IBM GitHub org administrators to request that the repo be unarchived.
+      </div>
+    </div>
+    <div class="step-item">
+      <div class="step-num">3</div>
+      <div class="step-text">Once unarchived, the next daily scan will confirm the alerts are resolved and will not
+        re-open a security tracking issue — no further enforcement action will occur.
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Section 6 — FAQ ── -->
+  <h2>Frequently asked questions</h2>
+
+  <div class="faq-item">
+    <div class="faq-q">Do I need to do anything with the issue itself?</div>
+    <div class="faq-a">No. The issue is managed entirely by the bot. You should not close it,
+      edit its body, or add labels to it. Just work on resolving the underlying security alerts
+      in the GitHub Security tab, and the issue will close itself once they are all gone.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">Why did I receive an email notification about this?</div>
+    <div class="faq-a">An Email Notifier component sends a formal email to repo admins when a new
+      security tracking issue is opened, when a warning comment is posted, and when an archive
+      notice is posted. The notification is sent to the email address associated with your GitHub
+      account in the IBM internal directory.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">There are alerts I can't fix right now — will the repo definitely be archived?</div>
+    <div class="faq-a">Only if the alert's individual SLA deadline passes without the alert being
+      resolved or dismissed. Low-severity alerts have no deadline and will never trigger archiving.
+      For higher-severity alerts, the only ways to prevent archiving are to resolve or dismiss the
+      alert in GitHub before its deadline, or to have the repo added to the exemption list by an
+      IBM org security administrator.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">The alerts on this issue look wrong or stale. What should I do?</div>
+    <div class="faq-a">The issue body is refreshed every day based on the live alert state in
+      GitHub. If you resolved an alert and it still appears in the issue, check whether GitHub
+      has already marked the alert as resolved in the Security tab. The issue will be updated on
+      the next daily run (within 24 hours).</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">My repo is used internally but is inactive. Can it be exempted?</div>
+    <div class="faq-a">Repos can be added to an exemption list by the IBM org security
+      administrators. Exempt repos are still scanned and their alerts are recorded in the org's
+      security reports, but no tracking issue is created and archiving is never triggered. Contact
+      your org admin if you believe your repo warrants an exemption.</div>
+  </div>
+
+  <div class="faq-item">
+    <div class="faq-q">I dismissed an alert as a false positive in GitHub — will the issue update?</div>
+    <div class="faq-a">Yes. Dismissed alerts are no longer counted as open by GitHub's API. On
+      the next daily run the scanner will no longer see the dismissed alert, and it will be removed
+      from the tracking issue. If all alerts are dismissed or resolved, the issue will be closed
+      automatically.</div>
+  </div>
+
+</div>
+</body>
+</html>
