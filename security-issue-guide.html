@@ -407,9 +407,15 @@
     <div class="step-item">
       <div class="step-num">4</div>
       <div class="step-text">
-        <strong>If you cannot fix an alert before its deadline:</strong> contact an IBM org security
-        administrator to request that the repository be added to the exemption list. Exempt repos
-        are still scanned and tracked, but archiving is never triggered for them.
+        <strong>If you cannot fix an alert before its deadline:</strong> first check whether the
+        alert can be <strong>dismissed</strong> in GitHub (e.g. it is a false positive, used in
+        tests only, or has no actionable path to remediation). Dismissed alerts are removed from
+        the tracking issue on the next daily run. If the alert is genuine and cannot be resolved
+        right now, request an exemption as a last resort — open an issue in
+        <a href="https://github.com/IBM/security-ops-bot">IBM/security-ops-bot</a> using the
+        <em>"Request security enforcement exemption"</em> template. Your request will be reviewed
+        by the security team; once approved it is processed automatically within 10 minutes.
+        Exempt repos are still scanned and tracked, but archiving is never triggered for them.
       </div>
     </div>
     <div class="step-item">
@@ -476,9 +482,9 @@
     <div class="faq-q">There are alerts I can't fix right now — will the repo definitely be archived?</div>
     <div class="faq-a">Only if the alert's individual SLA deadline passes without the alert being
       resolved or dismissed. Low-severity alerts have no deadline and will never trigger archiving.
-      For higher-severity alerts, the only ways to prevent archiving are to resolve or dismiss the
-      alert in GitHub before its deadline, or to have the repo added to the exemption list by an
-      IBM org security administrator.</div>
+      For higher-severity alerts, consider these options in order: (1) resolve the alert by fixing
+      the underlying issue; (2) dismiss it in the GitHub Security tab if it is a false positive or
+      not applicable to your use case; (3) as a last resort, request an exemption (see below).</div>
   </div>
 
   <div class="faq-item">
@@ -490,11 +496,21 @@
   </div>
 
   <div class="faq-item">
-    <div class="faq-q">My repo is used internally but is inactive. Can it be exempted?</div>
-    <div class="faq-a">Repos can be added to an exemption list by the IBM org security
-      administrators. Exempt repos are still scanned and their alerts are recorded in the org's
-      security reports, but no tracking issue is created and archiving is never triggered. Contact
-      your org admin if you believe your repo warrants an exemption.</div>
+    <div class="faq-q">My repo cannot resolve its alerts right now. When should I request an exemption?</div>
+    <div class="faq-a">Exemption is a last resort — use it only when the alert is genuine (not
+      dismissible) and there is no near-term path to remediation (e.g. a legacy repo awaiting
+      decommission, or a known issue blocked on an upstream fix with no ETA). Before requesting,
+      check whether the alert can be dismissed in the GitHub Security tab as a false positive or
+      not applicable. If exemption is the right call, open an issue in
+      <a href="https://github.com/IBM/security-ops-bot">IBM/security-ops-bot</a> using the
+      <em>"Request security enforcement exemption"</em> template. Provide your repository name
+      in the issue title (format: <code>[EXEMPT REQUEST] &lt;repo-name&gt;</code>) and a clear
+      justification in the body. Your request will be reviewed by the security team — you will
+      receive an <em>"Awaiting approval"</em> comment shortly after submission to confirm it was
+      received. Once a reviewer approves it (by adding the <code>approved</code> label), the
+      automation processes the request within 10 minutes and will confirm via a comment on your
+      issue. Exempt repos are still scanned and their alerts appear in the org's security reports,
+      but no tracking issue is created and archiving is never triggered.</div>
   </div>
 
   <div class="faq-item">
