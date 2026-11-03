@@ -413,7 +413,8 @@
         the tracking issue on the next daily run. If the alert is genuine and cannot be resolved
         right now, request an exemption as a last resort — open an issue in
         <a href="https://github.com/IBM/security-ops-bot">IBM/security-ops-bot</a> using the
-        <em>"Request security enforcement exemption"</em> template. Your request will be reviewed
+        <em>"Request security enforcement exemption"</em> template, naming your repository as
+        <code>&lt;org&gt;/&lt;repo-name&gt;</code>. Your request will be reviewed
         by the security team; once approved it is processed automatically within 10 minutes.
         Exempt repos are still scanned and tracked, but archiving is never triggered for them.
       </div>
@@ -503,9 +504,14 @@
       check whether the alert can be dismissed in the GitHub Security tab as a false positive or
       not applicable. If exemption is the right call, open an issue in
       <a href="https://github.com/IBM/security-ops-bot">IBM/security-ops-bot</a> using the
-      <em>"Request security enforcement exemption"</em> template. Provide your repository name
-      in the issue title (format: <code>[EXEMPT REQUEST] &lt;repo-name&gt;</code>) and a clear
-      justification in the body. Your request will be reviewed by the security team — you will
+      <em>"Request security enforcement exemption"</em> template. Provide your repository in the
+      issue title as <code>org/repo</code> (format:
+      <code>[EXEMPT REQUEST] &lt;org&gt;/&lt;repo-name&gt;</code>, for example
+      <code>[EXEMPT REQUEST] IBM/my-repo</code>), repeat it in the body's
+      <code>repo:</code> line (<code>* repo: IBM/my-repo</code>), and give a clear
+      justification. The org must be one the bot monitors, and the title and body must name the
+      same repository; otherwise the bot posts a comment listing what to correct. Edit the issue
+      and the request is picked up again automatically. Your request will be reviewed by the security team — you will
       receive an <em>"Awaiting approval"</em> comment shortly after submission to confirm it was
       received. Once a reviewer approves it (by adding the <code>approved</code> label), the
       automation processes the request within 10 minutes and will confirm via a comment on your
