@@ -27,19 +27,26 @@ tracking issue is created and the Enforcer will never archive them.
 ### How to request
 
 1. [Open an issue](https://github.com/IBM/security-ops-bot/issues/new/choose) using the **"Request security enforcement exemption"** template.
-2. Set the issue title to `[EXEMPT REQUEST] <repo-name>` (the template pre-fills this).
-3. Fill in the justification in the issue body.
+2. Set the issue title to `[EXEMPT REQUEST] <org>/<repo-name>`, e.g. `[EXEMPT REQUEST] IBM/my-repo`
+   (the template pre-fills the prefix).
+3. In the issue body, set `* repo: <org>/<repo-name>` to the same value and fill in the
+   justification. The org must be one the bot monitors, and the title and body must name the
+   same repository. If anything is wrong, the bot replies with a comment listing what to correct;
+   edit the issue and it is picked up again automatically.
 4. Submit — within 10 minutes you will receive an **"Awaiting approval"** comment confirming
    the request was received and notifying the review team.
 5. A security team member will review your request. Once approved (by adding the `approved`
    label), the automation runs within 10 minutes and will:
-   - Add your repository to the exemption list.
+   - Add your repository to the exemption list for its org.
    - Close the open security tracking issue in your repository with a comment linking back here.
    - Post a confirmation comment on this issue and close it.
 
 > **Note:** only IBM GitHub org members with Write access to this repo can add the `approved`
 > label. If your request has been waiting more than a few business days, contact the IBM GitHub
 > org administrators.
+>
+> Requests written before multi-org support, with a bare `[EXEMPT REQUEST] <repo-name>` title,
+> keep working only while the bot monitors a single org. Use `<org>/<repo-name>` for new requests.
 
 ## Documentation
 
@@ -49,12 +56,12 @@ tracking issue is created and the Enforcer will never archive them.
 
 ## How the bot works
 
-The bot runs as a GitHub App installed on the IBM GitHub org. Four components run on a daily
+The bot runs as a GitHub App installed on each monitored GitHub org. Four components run on a daily
 schedule from the private `opentech-security-ops` repo:
 
 | Component | Schedule (UTC) | What it does |
 |---|---|---|
-| Dependabot Scanner | 06:00 daily | Scans all org repos for open Dependabot vulnerability alerts |
-| Code & Secret Scanner | 07:00 daily | Scans all org repos for open code scanning and secret scanning alerts |
+| Dependabot Scanner | 06:00 daily | Scans all repos of each monitored org for open Dependabot vulnerability alerts |
+| Code & Secret Scanner | 07:00 daily | Scans all repos of each monitored org for open code scanning and secret scanning alerts |
 | Enforcer | 08:00 daily | Evaluates SLA deadlines, posts warnings, archives repos that breach their deadline |
 | Exempt Request Processor | Every 10 minutes | Processes approved exemption requests submitted via issues in this repo |

@@ -1,7 +1,7 @@
 ---
 name: Request security enforcement exemption
 about: Request that a repository be excluded from automated security warnings and archiving
-title: "[EXEMPT REQUEST] <repo-name>"
+title: "[EXEMPT REQUEST] <org>/<repo-name>"
 labels: 'exempt-request'
 assignees: ''
 
@@ -9,7 +9,7 @@ assignees: ''
 
 ## Exemption Request
 
-* repo: repo-name
+* repo: org/repo-name
 * justification: explain why this repository should be exempt from automated security enforcement
 
 <!-- DO NOT EDIT BELOW THIS POINT -->
@@ -18,7 +18,9 @@ assignees: ''
 
 #### Repository name
 
-* Replace `<repo-name>` in the **issue title** with the exact repository name (not the full URL)
+* Replace `<org>/<repo-name>` in the **issue title** and `org/repo-name` in the `repo:` line of the
+  body with the owning org and the exact repository name, e.g. `IBM/my-repo` (not the full URL).
+  Both must be the same. The org must be one the bot monitors
 * The title must keep the `[EXEMPT REQUEST] ` prefix exactly as shown — the automation uses it
   to identify exemption requests
 * Repository names are case-sensitive
